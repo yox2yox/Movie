@@ -13,9 +13,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
 
 @Composable
@@ -29,8 +32,11 @@ fun HomePage() {
         mutableStateOf("")
     }
     val speechData = mapOf<String, Pair<Color, String>>(
-        "speak0" to (Color.Blue to "そんな不気味で薄暗い道を2つのライトがゆっくりと進んでいく。天魔「ここが音楽室だね」天魔は持っていたライトで音楽室の看板を照らした。リュウ「なあ、もう帰ろうぜ……？」怯えた声で天魔にすがるリュウ。"),
-        "speak1" to (Color.Red to "辺りをライトで照らして安堵するリュウ。リュウ「はあ、じゃあ帰ろう。もう今日は終わりだ」")
+        "speak0" to (Color.Blue to "そんな不気味で薄暗い道を2つのライトがゆっくりと進んでいく。"),
+        "speak1" to (Color.Red to "辺りをライトで照らして安堵するリュウ。リュウ「はあ、じゃあ帰ろう。もう今日は終わりだ」"),
+        "speak2" to (Color.Green to "天魔「ここが音楽室だね」"),
+        "speak3" to (Color.Black to "天魔は持っていたライトで音楽室の看板を照らした。"),
+        "speak4" to (Color.Gray to "リュウ「なあ、もう帰ろうぜ……？」怯えた声で天魔にすがるリュウ。")
     )
     LaunchedEffect(key1 = Unit, block = {
         var textToSpeech: TextToSpeech? = null
@@ -69,13 +75,21 @@ fun HomePage() {
             .fillMaxSize()
             .background(backgroundColor)
     ) {
-        Text(
-            text = text,
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 32.dp)
-        )
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp, vertical = 32.dp)
+                .background(Color(0x00, 0x00, 0x00, 0xA0))
+        ) {
+            Text(
+                text = text,
+                modifier = Modifier.padding(8.dp),
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
+        }
     }
 }
 
