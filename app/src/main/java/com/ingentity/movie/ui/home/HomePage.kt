@@ -3,12 +3,16 @@ package com.ingentity.movie.ui.home
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,80 +29,30 @@ import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
 import com.ingentity.movie.R
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomePage() {
-
-    val context = LocalContext.current
-    var backgroundImage by remember {
-        mutableStateOf(R.drawable.tp_1)
-    }
-    var text by remember {
-        mutableStateOf("")
-    }
-    val speechData = mapOf(
-        "speak0" to (R.drawable.tp_1 to "そんな不気味で薄暗い道を2つのライトがゆっくりと進んでいく。"),
-        "speak1" to (R.drawable.tp_1 to "辺りをライトで照らして安堵するリュウ。リュウ「はあ、じゃあ帰ろう。もう今日は終わりだ」"),
-        "speak2" to (R.drawable.tp_1 to "天魔「ここが音楽室だね」"),
-        "speak3" to (R.drawable.tp_2 to "天魔は持っていたライトで音楽室の看板を照らした。"),
-        "speak4" to (R.drawable.tp_2 to "リュウ「なあ、もう帰ろうぜ……？」怯えた声で天魔にすがるリュウ。")
+    val pagerState = rememberPagerState()
+    val speechData = listOf(
+        (R.drawable.tp_1 to "そんな不気味で薄暗い道を2つのライトがゆっくりと進んでいく。"),
+        (R.drawable.tp_1 to "辺りをライトで照らして安堵するリュウ。リュウ「はあ、じゃあ帰ろう。もう今日は終わりだ」"),
+        (R.drawable.tp_1 to "天魔「ここが音楽室だね」"),
+        (R.drawable.tp_2 to "天魔は持っていたライトで音楽室の看板を照らした。"),
+        (R.drawable.tp_2 to "リュウ「なあ、もう帰ろうぜ……？」怯えた声で天魔にすがるリュウ。")
     )
-    LaunchedEffect(key1 = Unit, block = {
-        var textToSpeech: TextToSpeech? = null
-        textToSpeech = TextToSpeech(context) {
-            if (it == TextToSpeech.SUCCESS) {
-                textToSpeech?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-                    override fun onStart(p0: String?) {
-                        val data = speechData.get(p0)
-                        if (data != null) {
-                            backgroundImage = data.first
-                            text = data.second
-                        }
-                    }
 
-                    override fun onDone(p0: String?) {
-                    }
-
-                    override fun onError(p0: String?) {
-                    }
-
-                })
-                speechData.forEach { key, data ->
-                    textToSpeech?.speak(
-                        data.second,
-                        TextToSpeech.QUEUE_ADD,
-                        bundleOf(),
-                        key
-                    )
-                }
-            }
-        }
-
-    })
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Image(
-            painter = painterResource(id = backgroundImage),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+    val speechData2 = listOf(
+        (R.drawable.tp_2 to "ゆっくりと進んでいく。"),
+        (R.drawable.tp_1 to "辺りるリュウ。リュウ「はあ、じゃあ帰ろう。もう今日は終わりだ」"),
+        (R.drawable.tp_1 to "天魔「ここが音楽室だね」"),
+        (R.drawable.tp_2 to "天魔は持っていたライトで音楽室の看板を照らした。"),
+        (R.drawable.tp_2 to "リュウ「なあ、もう帰ろうぜ……？」怯えた声で天魔にすがるリュウ。")
+    )
+    VerticalPager(modifier = Modifier.fillMaxSize(), pageCount = 5, state = pagerState) { page ->
+        VideoComposable(
+            pagerState.currentPage == page,
+            if (page % 2 == 0) speechData else speechData2
         )
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp, vertical = 32.dp)
-                .background(Color(0x00, 0x00, 0x00, 0xA0))
-        ) {
-            Text(
-                text = text,
-                modifier = Modifier.padding(8.dp),
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
-        }
     }
 }
 
