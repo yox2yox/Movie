@@ -20,18 +20,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
+import coil.compose.AsyncImage
 import com.ingentity.movie.R
+import com.ingentity.movie.util.ContentItem
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @Composable
 fun VideoComposable(
     isShown: Boolean,
-    speechData: List<Pair<Int, String>>
+    speechData: List<ContentItem>
 ) {
     val context = LocalContext.current
     var backgroundImage by remember {
-        mutableStateOf(speechData.getOrNull(0)?.first ?: R.drawable.tp_1)
+        mutableStateOf(speechData.getOrNull(0)?.image ?: "")
     }
     var text by remember {
         mutableStateOf("")
@@ -51,8 +53,8 @@ fun VideoComposable(
                             override fun onStart(p0: String?) {
                                 val key = p0?.toIntOrNull()
                                 if (key != null) {
-                                    backgroundImage = speechData[key].first
-                                    text = speechData[key].second
+                                    backgroundImage = speechData[key].image
+                                    text = speechData[key].content
                                 }
                             }
 
@@ -65,7 +67,7 @@ fun VideoComposable(
                         })
                         speechData.forEachIndexed { index, data ->
                             textToSpeech?.speak(
-                                data.second,
+                                data.content,
                                 TextToSpeech.QUEUE_ADD,
                                 bundleOf(),
                                 index.toString()
@@ -80,8 +82,8 @@ fun VideoComposable(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Image(
-            painter = painterResource(id = backgroundImage),
+        AsyncImage(
+            model = backgroundImage,
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop

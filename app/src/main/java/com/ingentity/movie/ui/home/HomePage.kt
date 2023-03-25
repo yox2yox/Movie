@@ -28,18 +28,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
 import com.ingentity.movie.R
+import com.ingentity.movie.util.parseContent
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomePage() {
     val pagerState = rememberPagerState()
-    val speechData = listOf(
-        (R.drawable.tp_1 to "そんな不気味で薄暗い道を2つのライトがゆっくりと進んでいく。"),
-        (R.drawable.tp_1 to "辺りをライトで照らして安堵するリュウ。リュウ「はあ、じゃあ帰ろう。もう今日は終わりだ」"),
-        (R.drawable.tp_1 to "天魔「ここが音楽室だね」"),
-        (R.drawable.tp_2 to "天魔は持っていたライトで音楽室の看板を照らした。"),
-        (R.drawable.tp_2 to "リュウ「なあ、もう帰ろうぜ……？」怯えた声で天魔にすがるリュウ。")
-    )
+    val jsonString = """
+        {
+            "contents": [
+                {
+                    "image": "https://picsum.photos/200/300",
+                    "content": "そんな不気味で薄暗い道を2つのライトがゆっくりと進んでいく。"
+                },
+                {
+                    "image": "https://picsum.photos/200/300",
+                    "content": "辺りをライトで照らして安堵するリュウ。リュウ「はあ、じゃあ帰ろう。もう今日は終わりだ」"
+                },
+                {
+                    "image": "https://picsum.photos/200/300",
+                    "content": "天魔「ここが音楽室だね」"
+                }
+            ]
+        }
+    """.trimIndent()
+    val speechData = parseContent(jsonString)
 
     val speechData2 = listOf(
         (R.drawable.tp_2 to "ゆっくりと進んでいく。"),
@@ -51,7 +64,7 @@ fun HomePage() {
     VerticalPager(modifier = Modifier.fillMaxSize(), pageCount = 5, state = pagerState) { page ->
         VideoComposable(
             pagerState.currentPage == page,
-            if (page % 2 == 0) speechData else speechData2
+            speechData.contents
         )
     }
 }
