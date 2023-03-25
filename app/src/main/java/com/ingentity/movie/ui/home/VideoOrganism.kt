@@ -48,7 +48,7 @@ fun VideoComposable(
         scale.snapTo(1f)
         scale.animateTo(
             2f, animationSpec = tween(
-                durationMillis = 120000,
+                durationMillis = 60000,
                 delayMillis = 0,
                 easing = LinearEasing
             )
