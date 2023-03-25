@@ -38,21 +38,25 @@ fun HomePage() {
 
     val jsonString = """
         {
-            "contents": [
-                {
-                    "image": "https://picsum.photos/200/300",
-                    "content": "そんな不気味で薄暗い道を2つのライトがゆっくりと進んでいく。"
-                },
-                {
-                    "image": "https://picsum.photos/200/300",
-                    "content": "辺りをライトで照らして安堵するリュウ。リュウ「はあ、じゃあ帰ろう。もう今日は終わりだ」"
-                },
-                {
-                    "image": "https://picsum.photos/200/300",
-                    "content": "天魔「ここが音楽室だね」"
-                }
-            ]
-        }
+"contents":[
+{
+"image":"https://picsum.photos/200/300",
+"contentsText":[
+"そんな不気味で薄暗い道を2つのライトがゆっくりと進んでいく。",
+"辺りをライトで照らして安堵するリュウ。リュウ「はあ、じゃあ帰ろう。もう今日は終わりだ」",
+"天魔「ここが音楽室だね」"
+]
+},
+{
+"image":"https://picsum.photos/900/300",
+"contentsText":[
+"天魔は持っていたライトで音楽室の看板を照らした。",
+"リュウ「なあ、もう帰ろうぜ……？」",
+"怯えた声で天魔にすがるリュウ。"
+]
+}
+]
+}
     """.trimIndent()
     val speechData = parseContent(jsonString)
 

@@ -57,6 +57,14 @@ fun VideoComposable(
 
     var textToSpeech: TextToSpeech? by remember { mutableStateOf(null) }
     var job: Job? = null
+    val speechDataConverted = mutableListOf<Pair<String, String>>().apply {
+        speechData.forEach { data ->
+            data.contentsText.forEach { content ->
+                add(Pair(data.image, content))
+            }
+        }
+    }
+
     LaunchedEffect(key1 = isShown, block = {
         textToSpeech?.stop()
         job?.cancel()
@@ -69,8 +77,8 @@ fun VideoComposable(
                             override fun onStart(p0: String?) {
                                 val key = p0?.toIntOrNull()
                                 if (key != null) {
-                                    backgroundImage = speechData[key].image
-                                    text = speechData[key].content
+                                    backgroundImage = speechDataConverted[key].first
+                                    text = speechDataConverted[key].second
                                 }
                             }
 
@@ -81,9 +89,9 @@ fun VideoComposable(
                             }
 
                         })
-                        speechData.forEachIndexed { index, data ->
+                        speechDataConverted.forEachIndexed { index, data ->
                             textToSpeech?.speak(
-                                data.content,
+                                data.second,
                                 TextToSpeech.QUEUE_ADD,
                                 bundleOf(),
                                 index.toString()

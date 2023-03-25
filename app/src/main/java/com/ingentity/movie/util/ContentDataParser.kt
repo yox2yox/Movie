@@ -5,7 +5,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 @Serializable
-data class ContentItem(val image: String, val content: String)
+data class ContentItem(val image: String, val contentsText: List<String>)
 
 @Serializable
 data class ContentList(val contents: List<ContentItem>)
