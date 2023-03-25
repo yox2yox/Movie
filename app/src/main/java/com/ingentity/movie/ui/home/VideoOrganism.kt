@@ -2,6 +2,10 @@ package com.ingentity.movie.ui.home
 
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -29,7 +34,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun VideoComposable(
     isShown: Boolean,
-    speechData: List<ContentItem>
+    speechData: List<ContentItem>,
 ) {
     val context = LocalContext.current
     var backgroundImage by remember {
@@ -38,6 +43,17 @@ fun VideoComposable(
     var text by remember {
         mutableStateOf("")
     }
+    val scale = remember { Animatable(1f) }
+    LaunchedEffect(key1 = backgroundImage, block = {
+        scale.snapTo(1f)
+        scale.animateTo(
+            2f, animationSpec = tween(
+                durationMillis = 120000,
+                delayMillis = 0,
+                easing = LinearEasing
+            )
+        )
+    })
 
     var textToSpeech: TextToSpeech? by remember { mutableStateOf(null) }
     var job: Job? = null
@@ -85,7 +101,9 @@ fun VideoComposable(
         AsyncImage(
             model = backgroundImage,
             contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .scale(scale.value),
             contentScale = ContentScale.Crop
         )
         Box(

@@ -3,6 +3,7 @@ package com.ingentity.movie.ui.home
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.widget.Toast
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,6 +35,7 @@ import com.ingentity.movie.util.parseContent
 @Composable
 fun HomePage() {
     val pagerState = rememberPagerState()
+
     val jsonString = """
         {
             "contents": [
